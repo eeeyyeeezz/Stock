@@ -27,8 +27,8 @@ class ViewController: UIViewController {
 			DispatchQueue(label: "Aboba").async { [weak self] in
 				guard let self = self else { return }
 				sortDataByDate()
-				models.append(contentsOf: deals)
 				DispatchQueue.main.async {
+					self.models.append(contentsOf: deals)
 					self.tableView.reloadData()
 					debugPrint("NEW VALUE")
 				}
@@ -40,19 +40,20 @@ class ViewController: UIViewController {
 		sortSide = (sortSide == .orderedDescending) ? .orderedAscending : .orderedDescending
 	}
 	
+	// Сортировка по дата создания + amount
 	private func sortDataByDate() {
 		print(models.count)
 		if sortSide == .orderedDescending {
-			let sortedDeals = models.sorted { $0.dateModifier > $1.dateModifier }
+			var sortedDeals = models.sorted { $0.dateModifier > $1.dateModifier }
+			sortedDeals = models.sorted(by: { $0.amount > $1.amount })
 			models = sortedDeals
-			models = models.sorted(by: { $0.price > $1.price })
-			models = models.sorted(by: { $0.amount > $1.amount })
 		} else {
-			let sortedDeals = models.sorted { $0.dateModifier < $1.dateModifier }
+			var sortedDeals = models.sorted { $0.dateModifier < $1.dateModifier }
+			sortedDeals = models.sorted(by: { $0.amount < $1.amount })
 			models = sortedDeals
-			models = models.sorted(by: { $0.price < $1.price })
-			models = models.sorted(by: { $0.amount < $1.amount })
 		}
+
+		
 	}
 	
 }
