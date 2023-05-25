@@ -18,6 +18,7 @@
 		151E706F2941FC75000F9ED0 /* DealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151E706E2941FC75000F9ED0 /* DealCell.swift */; };
 		155E2E082942CF470094E5DA /* HeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155E2E062942CF470094E5DA /* HeaderCell.xib */; };
 		155E2E092942CF470094E5DA /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155E2E072942CF470094E5DA /* HeaderCell.swift */; };
+		4E22C0832A1F8BCB00D82DF7 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E22C0822A1F8BCB00D82DF7 /* Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		151E706E2941FC75000F9ED0 /* DealCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealCell.swift; sourceTree = "<group>"; };
 		155E2E062942CF470094E5DA /* HeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderCell.xib; sourceTree = "<group>"; };
 		155E2E072942CF470094E5DA /* HeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderCell.swift; sourceTree = "<group>"; };
+		4E22C0822A1F8BCB00D82DF7 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				4E0218CA2A1F5FD4001298C7 /* Storyboards */,
 				151E706A2940D98C000F9ED0 /* Server.swift */,
 				151E705A2940D970000F9ED0 /* ViewController.swift */,
+				4E22C0822A1F8BCB00D82DF7 /* Extension.swift */,
 				4E0218C92A1F5F7C001298C7 /* Cells */,
 			);
 			path = TemplateOfDealsViewer;
@@ -181,6 +184,7 @@
 			files = (
 				151E706F2941FC75000F9ED0 /* DealCell.swift in Sources */,
 				151E705B2940D970000F9ED0 /* ViewController.swift in Sources */,
+				4E22C0832A1F8BCB00D82DF7 /* Extension.swift in Sources */,
 				155E2E092942CF470094E5DA /* HeaderCell.swift in Sources */,
 				151E70572940D970000F9ED0 /* AppDelegate.swift in Sources */,
 				151E706B2940D98C000F9ED0 /* Server.swift in Sources */,
