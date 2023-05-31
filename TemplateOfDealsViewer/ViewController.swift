@@ -52,8 +52,8 @@ class ViewController: UIViewController {
 	}
 	
 	@objc func sortButtonTapped() {
-		let alert = UIAlertController(title: "Sort",
-									  message: "Choose Sort Side",
+		let alert = UIAlertController(title: "Sort by",
+									  message: nil,
 									  preferredStyle: UIAlertController.Style.alert)
 
 		alert.addAction(UIAlertAction(title: "Date", style: UIAlertAction.Style.default, handler: { [weak self] _ in
