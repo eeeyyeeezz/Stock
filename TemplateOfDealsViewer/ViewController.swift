@@ -1,10 +1,21 @@
 import UIKit
 
+enum SortSide {
+	case date
+	case instrument
+	case price
+	case amount
+	case side
+}
+
+
 class ViewController: UIViewController {
 	private let server = Server()
+	private lazy var instrumentNames = server.instrumentNames
 	private var models: [Deal] = []
 	@IBOutlet weak var tableView: UITableView!
-	private var sortSide: ComparisonResult = .orderedDescending
+	private var sortSide: SortSide = .date
+	private var sortOrder: ComparisonResult = .orderedAscending
 	
 	
 	override func viewDidLoad() {
@@ -17,18 +28,22 @@ class ViewController: UIViewController {
 						   forHeaderFooterViewReuseIdentifier: HeaderCell.reuseIidentifier)
 		tableView.dataSource = self
 		tableView.delegate = self
-		navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Rotate",
-															style: .done,
+		navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort",
+															style: .plain,
 															target: self,
 															action: #selector(sortButtonTapped))
+		navigationItem.leftBarButtonItem = UIBarButtonItem(title: "SortSide",
+															style: .plain,
+															target: self,
+															action: #selector(changeSortSide))
 
 		server.subscribeToDeals { [weak self] deals in
 			guard let self = self else { return }
 			DispatchQueue(label: "Aboba").async { [weak self] in
 				guard let self = self else { return }
+				models.append(contentsOf: deals)
 				sortDataByDate()
 				DispatchQueue.main.async {
-					self.models.append(contentsOf: deals)
 					self.tableView.reloadData()
 					debugPrint("NEW VALUE")
 				}
@@ -36,24 +51,59 @@ class ViewController: UIViewController {
 		}
 	}
 	
-	@objc private func sortButtonTapped() {
-		sortSide = (sortSide == .orderedDescending) ? .orderedAscending : .orderedDescending
+	@objc func sortButtonTapped() {
+		let alert = UIAlertController(title: "Sort",
+									  message: "Choose Sort Side",
+									  preferredStyle: UIAlertController.Style.alert)
+
+		alert.addAction(UIAlertAction(title: "Date", style: UIAlertAction.Style.default, handler: { [weak self] _ in
+			self?.sortSide = .date
+		}))
+		
+		alert.addAction(UIAlertAction(title: "Instrument", style: UIAlertAction.Style.default, handler: { [weak self] _ in
+			self?.sortSide = .instrument
+		}))
+		
+		alert.addAction(UIAlertAction(title: "Amount", style: UIAlertAction.Style.default, handler: { [weak self] _ in
+			self?.sortSide = .amount
+		}))
+		
+		alert.addAction(UIAlertAction(title: "Price", style: UIAlertAction.Style.default, handler: { [weak self] _ in
+			self?.sortSide = .price
+		}))
+		
+		alert.addAction(UIAlertAction(title: "Side", style: UIAlertAction.Style.default, handler: { [weak self] _ in
+			self?.sortSide = .side
+		}))
+		
+		// show the alert
+		self.present(alert, animated: true, completion: nil)
 	}
 	
-	// Сортировка по дата создания + amount
+	@objc private func changeSortSide() {
+		sortOrder = (sortOrder == .orderedAscending) ? .orderedDescending : .orderedAscending
+	}
+	
+	// Сортировка
 	private func sortDataByDate() {
 		print(models.count)
-		if sortSide == .orderedDescending {
-			var sortedDeals = models.sorted { $0.dateModifier > $1.dateModifier }
-			sortedDeals = models.sorted(by: { $0.amount > $1.amount })
-			models = sortedDeals
-		} else {
-			var sortedDeals = models.sorted { $0.dateModifier < $1.dateModifier }
-			sortedDeals = models.sorted(by: { $0.amount < $1.amount })
-			models = sortedDeals
+		if sortSide == .date {
+			models = (sortOrder == .orderedAscending) ?
+			models.sorted { $0.dateModifier > $1.dateModifier } : models.sorted { $0.dateModifier < $1.dateModifier }
+		} else if sortSide == .instrument {
+			models = (sortOrder == .orderedAscending) ?
+			models.sorted(by: { instrumentNames.firstIndex(of: $0.instrumentName)! < instrumentNames.firstIndex(of: $1.instrumentName)! })
+			: models.sorted(by: { instrumentNames.firstIndex(of: $0.instrumentName)! > instrumentNames.firstIndex(of: $1.instrumentName)! })
+		} else if sortSide == .amount {
+			models = (sortOrder == .orderedAscending) ?
+			models.sorted { $0.amount > $1.amount } : models.sorted { $0.amount < $1.amount }
+		} else if sortSide == .price {
+			models = (sortOrder == .orderedAscending) ?
+			models.sorted { $0.price > $1.price } : models.sorted { $0.price < $1.price }
+		} else if sortSide == .side {
+			models = (sortOrder == .orderedAscending) ?
+			models.filter { $0.side == .buy } : models.filter { $0.side == .sell }
 		}
-
-		
 	}
 	
 }
