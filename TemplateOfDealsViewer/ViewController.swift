@@ -36,7 +36,8 @@ class ViewController: UIViewController {
 															style: .plain,
 															target: self,
 															action: #selector(changeSortSide))
-
+		models.reserveCapacity(1000000)
+		
 		server.subscribeToDeals { [weak self] deals in
 			guard let self = self else { return }
 			DispatchQueue(label: "Aboba").async { [weak self] in
@@ -102,7 +103,7 @@ class ViewController: UIViewController {
 			models.sorted { $0.price > $1.price } : models.sorted { $0.price < $1.price }
 		} else if sortSide == .side {
 			models = (sortOrder == .orderedAscending) ?
-			models.filter { $0.side == .buy } : models.filter { $0.side == .sell }
+			models.sorted(by: { model, _ in model.side == .buy }) : models.sorted(by: { model, _ in model.side == .sell })
 		}
 	}
 	
